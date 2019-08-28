@@ -47,23 +47,57 @@ $( document ).ready(function() {
 		return tmp_arr.join("");
 	}
 	
-	// Функция получения размера сдвига
+	// Функция получения рандомной бинарной строки
+	function randomBinStr() {
+		return Math.round(Math.random() * Math.pow(10, 16)).toString(2);
+	}
+	
+	// Функция сдвига при кодировании
 	// @key(string) utf16
 	// @val(string) binary
 	function inShiftVal(key, val) {
 		var shift = toBinStr(key).replace(/0/gi, '').length;
-		var res = shift;
 		if (val.length < shift) {
 			if (shift % val.length != 0) {
-				res = shift % val.length;
+				shift = shift % val.length;
 			} else {
-				res = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
-				if (res >= 16) res = 13;
+				shift = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
+				if (shift >= 16) shift = 13;
 			}
 		} else if (val.length == shift) {
-			res = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
-			if (res >= 16) res = 13;
+			shift = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
+			if (shift >= 16) shift = 13;
 		}
+		var first = val.substr(0, val.length - shift);
+		var last = val.substr(-shift);
+		var res = last + first;
+		return res;
+	}
+	
+	// Функция инъекции мусора
+	// @key(string) utf16
+	// @val(string) binary
+	function injectTrash(key, val) {
+		var step2_arr_key = toBinArr(key);
+		var string_in = val;
+		var last_char = step2_arr_key[0].replace(/0/gi, '').length;
+		var res = ''
+		while (string_in.length > last_char) {
+			$(step2_arr_key).each(function(index, value) {
+				var leng_in = string_in.length;
+				var value_int = value.replace(/0/gi, '').length;
+				if (leng_in > value_int) {
+					var tmp_start = string_in.substr(0, value_int);
+					var tmp_finish = string_in.substring(value_int, leng_in);
+					var tmp_random = randomBinStr().substr(0, value_int);
+					res += tmp_start + tmp_random;
+					string_in = tmp_finish;
+					var last_char = value_int;
+					return true;
+				}
+			});
+		}
+		res += string_in;
 		return res;
 	}
 	
@@ -72,11 +106,10 @@ $( document ).ready(function() {
 	// @val(string) utf16
 	function coding(key, val) {
 		var val_bin = toBinStr(val);
-		var sift = inShiftVal(key, val_bin);
-		var first = val_bin.substr(0, val_bin.length - sift);
-		var last = val_bin.substr(-sift);
-		var step1 = last + first;
-		var step2 = '2';
+		
+		var step1 = inShiftVal(key, val_bin);
+		var step2 = injectTrash(key, step1);
+		
 		var step3 = '3';
 		var step4 = '4';
 		var res = [
@@ -107,6 +140,7 @@ $( document ).ready(function() {
 	
 	
 	$('.key').focus();
+	
 	$('body').on('keyup', '.key', function() {
 		var key = $('.key').val();
 		
@@ -119,11 +153,13 @@ $( document ).ready(function() {
 		var in_val = $('.in-step-0').val();
 		
 		var code = coding(key, in_val);
+		$('.in-step-1').val(code[0]);
+		$('.in-step-2').val(code[1]);
 		
 		/*  tests  */
-		var temp2 = toBinStr(in_val);
-		var temp2shift = inShiftVal(key, temp2)
-		$('.temp2').val(temp2 + '('+ temp2shift +')');
-		$('.in-step-1').val(code[0]);
+		var temp2 = toBinArr(key);
+		var temp3 = toBinStr(in_val);
+		$('.temp2').val(temp2);
+		$('.temp3').val(temp3);
 	});
 });
