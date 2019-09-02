@@ -2,37 +2,49 @@
 <html lang="ru">
 <head>
 	<meta charset="utf-8">
-	<title>cryptor</title>
+	<title>binary-cryptor</title>
 	<script type="text/javascript" src="jquery-3.4.1.min.js"></script>
-	<script type="text/javascript" src="script.js"></script>
+	<script type="text/javascript" src="binary-cryptor-min.js"></script>
 </head>
 <body>
 	<div>
 		<input type="text" name="key" class="key">
-		<br>
-		<br>
-		<textarea class="temp1" cols="30" rows="10"></textarea>
-		<textarea class="temp2" cols="30" rows="10"></textarea>
-		<textarea class="temp3" cols="30" rows="10"></textarea>
-		<textarea class="temp4" cols="30" rows="10"></textarea>
 	</div>
 	<br>
 	<div>
-		<textarea class="in-step-0" cols="30" rows="10"></textarea>
-		<textarea class="in-step-1" cols="30" rows="10"></textarea>
-		<textarea class="in-step-2" cols="30" rows="10"></textarea>
-		<textarea class="in-step-3" cols="30" rows="10"></textarea>
-		<textarea class="in-step-4" cols="30" rows="10"></textarea>
+		<textarea class="in1" cols="30" rows="10"></textarea>
+		<textarea class="in2" cols="30" rows="10"></textarea>
 		<br>
+		<button class="crypt" type="button" name="button">crypt</button>
 	</div>
 	<br>
 	<div>
-		<textarea class="out-step-0" cols="30" rows="10"></textarea>
-		<textarea class="out-step-1" cols="30" rows="10"></textarea>
-		<textarea class="out-step-2" cols="30" rows="10"></textarea>
-		<textarea class="out-step-3" cols="30" rows="10"></textarea>
-		<textarea class="out-step-4" cols="30" rows="10"></textarea>
+		<textarea class="out1" cols="30" rows="10"></textarea>
+		<textarea class="out2" cols="30" rows="10"></textarea>
 		<br>
+		<button class="encrypt" type="button" name="button">encrypt</button>
 	</div>
+	
+	<script type="text/javascript">
+	$('.key').focus();
+	
+	$('body').on('click', '.crypt', function() {
+		var key = $('.key').val();
+		var in_val = $('.in1').val();
+		
+		var code = coding(key, in_val);
+		
+		$('.in2').val(code);
+	});
+	$('body').on('click', '.encrypt', function() {
+		var key = $('.key').val();
+		var out_val = $('.in2').val();
+		
+		var decode = decoding(key, out_val);
+		
+		$('.out2').val(decode);
+	});
+	</script>
+	
 </body>
 </html>
