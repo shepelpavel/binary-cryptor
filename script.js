@@ -135,6 +135,37 @@ $( document ).ready(function() {
 		return res;
 	}
 	
+	// Функция побитового кодирования
+	// @key(string) utf16
+	// @val(string) binary
+	// val - 1010
+	// key - 1001
+	// res - 1100
+	function binaryCode(key, val) {
+		var key_bin = toBinStr(key);
+		var key_arr = key_bin.split('');
+		var string_in = val;
+		var res = '';
+		while (string_in.length > 0) {
+			$(key_arr).each(function(index, value) {
+				if (string_in.length > 0) {
+					var tmp_start = string_in.charAt(0);
+					var tmp_finish = string_in.substr(1, string_in.length);
+					if (tmp_start == value) {
+						var bit = '1';
+					} else {
+						var bit = '0';
+					}
+					res += bit;
+					string_in = tmp_finish;
+				} else {
+					return false;
+				}
+			});
+		}
+		return res;
+	}
+	
 	// Функция кодирования
 	// @key(string) utf16
 	// @val(string) utf16
@@ -144,8 +175,8 @@ $( document ).ready(function() {
 		var step1 = inShiftVal(key, val_bin);
 		var step2 = injectTrash(key, step1);
 		var step3 = reverseBits(key, step2);
+		var step4 = binaryCode(key, step3);
 		
-		var step4 = '4';
 		var res = [
 			step1,
 			step2,
@@ -190,6 +221,7 @@ $( document ).ready(function() {
 		$('.in-step-1').val(code[0]);
 		$('.in-step-2').val(code[1]);
 		$('.in-step-3').val(code[2]);
+		$('.in-step-4').val(code[3]);
 		
 		/*  tests  */
 		var temp2 = toBinArr(key);
