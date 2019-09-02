@@ -86,14 +86,48 @@ $( document ).ready(function() {
 			$(step2_arr_key).each(function(index, value) {
 				var leng_in = string_in.length;
 				var value_int = value.replace(/0/gi, '').length;
+				var last_char = value_int;
 				if (leng_in > value_int) {
 					var tmp_start = string_in.substr(0, value_int);
 					var tmp_finish = string_in.substring(value_int, leng_in);
 					var tmp_random = randomBinStr().substr(0, value_int);
 					res += tmp_start + tmp_random;
 					string_in = tmp_finish;
-					var last_char = value_int;
-					return true;
+				} else {
+					return false;
+				}
+			});
+		}
+		res += string_in;
+		return res;
+	}
+	
+	// Функция реверса битов при кодировании
+	// @key(string) utf16
+	// @val(string) binary
+	function reverseBits(key, val) {
+		var step3_arr_key = toBinArr(key);
+		var string_in = val;
+		var last_char = step3_arr_key[0].replace(/0/gi, '').length;
+		var res = ''
+		while (string_in.length > last_char) {
+			$(step3_arr_key).each(function(index, value) {
+				var leng_in = string_in.length;
+				var value_int = value.replace(/0/gi, '').length;
+				var last_char = value_int;
+				if (leng_in > value_int) {
+					var tmp_start = string_in.substr(0, value_int-1);
+					var tmp_finish = string_in.substring(value_int, leng_in);
+					var sym_in = string_in.charAt(value_int-1);
+					if (sym_in == '0') {
+						var sym_trgt = '1';
+					} else {
+						var sym_trgt = '0';
+					}
+					res += tmp_start + sym_trgt;
+					string_in = tmp_finish;
+				} else {
+					return false;
 				}
 			});
 		}
@@ -109,8 +143,8 @@ $( document ).ready(function() {
 		
 		var step1 = inShiftVal(key, val_bin);
 		var step2 = injectTrash(key, step1);
+		var step3 = reverseBits(key, step2);
 		
-		var step3 = '3';
 		var step4 = '4';
 		var res = [
 			step1,
@@ -155,6 +189,7 @@ $( document ).ready(function() {
 		var code = coding(key, in_val);
 		$('.in-step-1').val(code[0]);
 		$('.in-step-2').val(code[1]);
+		$('.in-step-3').val(code[2]);
 		
 		/*  tests  */
 		var temp2 = toBinArr(key);
