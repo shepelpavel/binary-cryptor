@@ -74,6 +74,28 @@ $( document ).ready(function() {
 		return res;
 	}
 	
+	// Функция сдвига при ДЕкодировании
+	// @key(string) utf16
+	// @val(string) binary
+	function outShiftVal(key, val) {
+		var shift = toBinStr(key).replace(/0/gi, '').length;
+		if (val.length < shift) {
+			if (shift % val.length != 0) {
+				shift = shift % val.length;
+			} else {
+				shift = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
+				if (shift >= 16) shift = 13;
+			}
+		} else if (val.length == shift) {
+			shift = toBinStr(key.charAt(0)).replace(/0/gi, '').length;
+			if (shift >= 16) shift = 13;
+		}
+		var first = val.substr(0, shift);
+		var last = val.substr(shift, val.length);
+		var res = last + first;
+		return res;
+	}
+	
 	// Функция инъекции мусора
 	// @key(string) utf16
 	// @val(string) binary
@@ -92,6 +114,33 @@ $( document ).ready(function() {
 					var tmp_finish = string_in.substring(value_int, leng_in);
 					var tmp_random = randomBinStr().substr(0, value_int);
 					res += tmp_start + tmp_random;
+					string_in = tmp_finish;
+				} else {
+					return false;
+				}
+			});
+		}
+		res += string_in;
+		return res;
+	}
+	
+	// Функция удаления мусора
+	// @key(string) utf16
+	// @val(string) binary
+	function deleteTrash(key, val) {
+		var step2_arr_key = toBinArr(key);
+		var string_in = val;
+		var last_char = step2_arr_key[0].replace(/0/gi, '').length;
+		var res = ''
+		while (string_in.length > last_char) {
+			$(step2_arr_key).each(function(index, value) {
+				var leng_in = string_in.length;
+				var value_int = value.replace(/0/gi, '').length;
+				var last_char = value_int;
+				if (leng_in > value_int) {
+					var tmp_start = string_in.substr(0, value_int * 2);
+					var tmp_finish = string_in.substring(value_int * 2, leng_in);
+					res += tmp_start.substr(0, value_int);
 					string_in = tmp_finish;
 				} else {
 					return false;
@@ -135,7 +184,7 @@ $( document ).ready(function() {
 		return res;
 	}
 	
-	// Функция побитового кодирования
+	// Функция побитового кодирования/декодирования
 	// @key(string) utf16
 	// @val(string) binary
 	// val - 1010
@@ -190,10 +239,10 @@ $( document ).ready(function() {
 	// @key(string) utf16
 	// @val(string) binary
 	function decoding(key, val) {
-		var step4 = '4';
-		var step3 = '3';
-		var step2 = '2';
-		var step1 = '1';
+		var step4 = binaryCode(key, val);
+		var step3 = reverseBits(key, step4);
+		var step2 = deleteTrash(key, step3);
+		var step1 = binToStr(outShiftVal(key, step2));
 		var res = [
 			step4,
 			step3,
@@ -222,6 +271,13 @@ $( document ).ready(function() {
 		$('.in-step-2').val(code[1]);
 		$('.in-step-3').val(code[2]);
 		$('.in-step-4').val(code[3]);
+		$('.out-step-4').val(code[3]);
+		
+		var decode = decoding(key, code[3]);
+		$('.out-step-3').val(decode[0]);
+		$('.out-step-2').val(decode[1]);
+		$('.out-step-1').val(decode[2]);
+		$('.out-step-0').val(decode[3]);
 		
 		/*  tests  */
 		var temp2 = toBinArr(key);
