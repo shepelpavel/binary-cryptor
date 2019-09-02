@@ -136,7 +136,7 @@ function deleteTrash(key, val) {
 			var leng_in = string_in.length;
 			var value_int = value.replace(/0/gi, '').length;
 			var last_char = value_int;
-			if (leng_in > value_int) {
+			if (leng_in > value_int * 2) {
 				var start = string_in.substr(0, value_int * 2);
 				var finish = string_in.substring(value_int * 2, leng_in);
 				res += start.substr(0, value_int);
