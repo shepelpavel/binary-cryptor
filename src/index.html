@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <title>cryptor</title>
+    <script type="text/javascript" src="/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/src/binary-cryptor.js"></script>
+</head>
+
+<body>
+    <div>
+        <input type="text" name="key" class="key">
+        <br>
+        <br>
+        <textarea class="temp0" cols="30" rows="10"></textarea>
+        <textarea class="temp1" cols="30" rows="10"></textarea>
+        <textarea class="temp2" cols="30" rows="10"></textarea>
+        <textarea class="temp3" cols="30" rows="10"></textarea>
+        <textarea class="temp4" cols="30" rows="10"></textarea>
+    </div>
+    <br>
+    <div>
+        <textarea class="in-step-0" cols="30" rows="10"></textarea>
+        <textarea class="in-step-1" cols="30" rows="10"></textarea>
+        <textarea class="in-step-2" cols="30" rows="10"></textarea>
+        <textarea class="in-step-3" cols="30" rows="10"></textarea>
+        <textarea class="in-step-4" cols="30" rows="10"></textarea>
+        <br>
+    </div>
+    <br>
+    <div>
+        <textarea class="out-step-0" cols="30" rows="10"></textarea>
+        <textarea class="out-step-1" cols="30" rows="10"></textarea>
+        <textarea class="out-step-2" cols="30" rows="10"></textarea>
+        <textarea class="out-step-3" cols="30" rows="10"></textarea>
+        <textarea class="out-step-4" cols="30" rows="10"></textarea>
+        <br>
+    </div>
+</body>
+
+<script>
+    $('body').on('keyup', '.key', function () {
+        var key = $('.key').val();
+        var binkey = toBinStr(key);
+        $('.temp0').val(binkey);
+    });
+
+    $('body').on('keyup', '.in-step-0', function () {
+        var key = $('.key').val();
+        var in_val = $('.in-step-0').val();
+        var bin_val = toBinStr(in_val);
+
+
+        $('.temp1').val(bin_val);
+        var code1 = inShiftVal(key, bin_val);
+        $('.in-step-1').val(code1);
+
+        $('.temp2').val(code1);
+        var code2 = injectTrash(key, code1);
+        $('.in-step-2').val(code2);
+
+        $('.temp3').val(code2);
+        var code3 = reverseBits(key, code2);
+        $('.in-step-3').val(code3);
+
+        $('.temp4').val(code3);
+        var code4 = binaryCode(key, code3);
+        $('.in-step-4').val(code4);
+        $('.out-step-4').val(code4);
+
+
+        var decode3 = binaryCode(key, code4);
+        $('.out-step-3').val(decode3);
+
+        var decode2 = reverseBits(key, decode3);
+        $('.out-step-2').val(decode2);
+
+        var decode1 = deleteTrash(key, decode2);
+        $('.out-step-1').val(decode1);
+
+        var decode0 = binToStr(outShiftVal(key, decode1));
+        $('.out-step-0').val(decode0);
+    });
+</script>
+
+</html>
