@@ -42,6 +42,7 @@ function toBinArr(str) {
 // @str(string) binary
 function binToStr(str) {
 	if (str) {
+		str = str.replace(/[^0-1]/gim, '');
 		str = str.replace(/\s+/g, '');
 		str = str.match(/.{1,16}/g).join(" ");
 		var bin = str.split(" ");
@@ -63,6 +64,7 @@ function randomBinStr() {
 // @val(string) binary
 function inShiftVal(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var shift = toBinStr(key).replace(/0/gi, '').length;
 		if (val.length < shift) {
 			if (shift % val.length != 0) {
@@ -87,6 +89,7 @@ function inShiftVal(key, val) {
 // @val(string) binary
 function outShiftVal(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var shift = toBinStr(key).replace(/0/gi, '').length;
 		if (val.length < shift) {
 			if (shift % val.length != 0) {
@@ -111,6 +114,7 @@ function outShiftVal(key, val) {
 // @val(string) binary
 function injectTrash(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var key_arr = toBinArr(key);
 		var string_in = val;
 		var last_char = key_arr[0].replace(/0/gi, '').length;
@@ -141,6 +145,7 @@ function injectTrash(key, val) {
 // @val(string) binary
 function deleteTrash(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var key_arr = toBinArr(key);
 		var string_in = val;
 		var last_char = key_arr[0].replace(/0/gi, '').length;
@@ -170,6 +175,7 @@ function deleteTrash(key, val) {
 // @val(string) binary
 function reverseBits(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var key_arr = toBinArr(key);
 		var string_in = val;
 		var last_char = key_arr[0].replace(/0/gi, '').length;
@@ -208,6 +214,7 @@ function reverseBits(key, val) {
 // res - 1100
 function binaryCode(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var key_bin = toBinStr(key);
 		var key_arr = key_bin.split('');
 		var string_in = val;
@@ -253,6 +260,7 @@ function coding(key, val) {
 // @val(string) binary
 function decoding(key, val) {
 	if (key && val) {
+		val = val.replace(/[^0-1]/gim, '');
 		var step4 = binaryCode(key, val);
 		var step3 = reverseBits(key, step4);
 		var step2 = deleteTrash(key, step3);
