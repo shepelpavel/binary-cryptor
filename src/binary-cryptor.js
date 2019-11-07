@@ -150,7 +150,7 @@ function deleteTrash(key, val) {
 		var string_in = val;
 		var last_char = key_arr[0].replace(/0/gi, '').length;
 		var res = ''
-		while (string_in.length > last_char) {
+		while (string_in.length > last_char * 2) {
 			$(key_arr).each(function (index, value) {
 				var leng_in = string_in.length;
 				var value_int = value.replace(/0/gi, '').length;

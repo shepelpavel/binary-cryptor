@@ -82,6 +82,24 @@
         var decode0 = binToStr(outShiftVal(key, decode1));
         $('.out-step-0').val(decode0);
     });
+
+    $('body').on('keyup', '.out-step-4', function () {
+        var key = $('.key').val();
+        var out_val = $('.out-step-4').val();
+
+
+        var decode3 = binaryCode(key, out_val);
+        $('.out-step-3').val(decode3);
+
+        var decode2 = reverseBits(key, decode3);
+        $('.out-step-2').val(decode2);
+
+        var decode1 = deleteTrash(key, decode2);
+        $('.out-step-1').val(decode1);
+
+        var decode0 = binToStr(outShiftVal(key, decode1));
+        $('.out-step-0').val(decode0);
+    });
 </script>
 
 </html>
