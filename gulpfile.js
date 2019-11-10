@@ -20,7 +20,6 @@ gulp.task('build', function (cb) {
             uglify(),
             rename(function (path) {
                 path.extname = (".min" + path.extname).toLowerCase();
-                console.log(path);
             }),
             gulp.dest(path.build.js)
         ],
