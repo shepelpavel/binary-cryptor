@@ -137,7 +137,7 @@ function injectTrash(key, val) {
 				if (leng_in > v_int) {
 					var start = string_in.substr(0, v_int);
 					var finish = string_in.substring(v_int, leng_in);
-					var random = trashBinStr(leng_in).substr(0, v_int);
+					var random = trashBinStr(finish.length).substr(0, v_int);
 					res += start + random;
 					string_in = finish;
 				} else {
