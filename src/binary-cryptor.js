@@ -54,9 +54,19 @@ function binToStr(str) {
 	}
 }
 
-// Функция получения рандомной бинарной строки
-function randomBinStr() {
-	return Math.round(Math.random() * Math.pow(10, 16)).toString(2);
+// Функция реверса строки
+function reverseString(str) {
+	var res = '';
+	if (str != '') {
+		res = reverseString(str.substr(1)) + str.charAt(0);
+	}
+	return res;
+}
+
+// Функция получения мусорной строки
+function trashBinStr(val) {
+	var res = reverseString(toBinStr(val.toString(10)));
+	return res;
 }
 
 // Функция сдвига при кодировании
@@ -127,7 +137,7 @@ function injectTrash(key, val) {
 				if (leng_in > v_int) {
 					var start = string_in.substr(0, v_int);
 					var finish = string_in.substring(v_int, leng_in);
-					var random = randomBinStr().substr(0, v_int);
+					var random = trashBinStr(leng_in).substr(0, v_int);
 					res += start + random;
 					string_in = finish;
 				} else {
